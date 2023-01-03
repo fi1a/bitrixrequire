@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+    backupGlobals="false"
+    backupStaticAttributes="false"
+    colors="true"
+    bootstrap="tests/autoload.php"
+    failOnRisky="true"
+    failOnWarning="true"
+>
+    <coverage
+        includeUncoveredFiles="true"
+        processUncoveredFiles="false"
+        pathCoverage="false"
+        ignoreDeprecatedCodeUnits="true"
+        disableCodeCoverageIgnore="false"
+    >
+        <include>
+            <directory suffix=".php">./lib</directory>
+        </include>
+        <exclude>
+            <directory>./tests</directory>
+            <directory>./vendor</directory>
+        </exclude>
+    </coverage>
+    <testsuites>
+        <testsuite name="BitrixRequire Test Suite">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="BITRIX_DIR" value="path/to/bitrix"/>
+    </php>
+</phpunit>
