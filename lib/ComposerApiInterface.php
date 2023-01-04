@@ -7,15 +7,15 @@ namespace Fi1a\BitrixRequire;
 /**
  * API к командам composer
  */
-interface ComposerAPIInterface
+interface ComposerApiInterface
 {
     /**
      * Установить пакет
      */
-    public function require(string $packet, string $version): ResultInterface;
+    public function require(string $package, string $version): ResultInterface;
 
     /**
      * Удалить пакет
      */
-    public function remove(string $packet): ResultInterface;
+    public function remove(string $package): ResultInterface;
 }

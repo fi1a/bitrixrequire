@@ -12,6 +12,7 @@ use Bitrix\Main\Engine\ActionFilter\Authentication;
 use Bitrix\Main\Engine\ActionFilter\HttpMethod;
 use Bitrix\Main\Localization\Loc;
 use Fi1a\BitrixRequire\ActionFilter\Rights;
+use Fi1a\BitrixRequire\Services\ComposerService;
 
 class Fi1aBitrixRequireAdminComponent extends CBitrixComponent implements Controllerable, Errorable
 {
@@ -26,7 +27,7 @@ class Fi1aBitrixRequireAdminComponent extends CBitrixComponent implements Contro
     public function configureActions()
     {
         return [
-            'getList' => [
+            'require' => [
                 'prefilters' => [
                     new Authentication(),
                     new Rights(static::MODULE_ID, 'E'),
@@ -135,5 +136,28 @@ class Fi1aBitrixRequireAdminComponent extends CBitrixComponent implements Contro
         }
 
         $this->IncludeComponentTemplate();
+    }
+
+    /**
+     * Добавить пакет
+     *
+     * @return mixed[]|null
+     */
+    public function requireAction(string $package, ?string $version = null)
+    {
+        $service = new ComposerService();
+
+        try {
+            $result = $service->require($package, $version);
+        } catch (InvalidArgumentException $exception) {
+            $this->addError(new Error($exception->getMessage()));
+
+            return null;
+        }
+
+        return [
+            'success' => $result->isSuccess(),
+            'output' => nl2br($result->getOutput()),
+        ];
     }
 }

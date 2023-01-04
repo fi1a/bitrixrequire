@@ -22,9 +22,13 @@ Loader::registerAutoloadClasses(
         // Хелперы
         '\Fi1a\BitrixRequire\Helpers\ModuleRegistry' => 'lib/Helpers/ModuleRegistry.php',
 
+        // Сервисы
+        '\Fi1a\BitrixRequire\Services\ComposerServiceInterface' => 'lib/Services/ComposerServiceInterface.php',
+        '\Fi1a\BitrixRequire\Services\ComposerService' => 'lib/Services/ComposerService.php',
+
         // Composer API
-        '\Fi1a\BitrixRequire\ComposerAPIInterface' => 'lib/ComposerAPIInterface.php',
-        '\Fi1a\BitrixRequire\ComposerAPI' => 'lib/ComposerAPI.php',
+        '\Fi1a\BitrixRequire\ComposerApiInterface' => 'lib/ComposerApiInterface.php',
+        '\Fi1a\BitrixRequire\ComposerApi' => 'lib/ComposerApi.php',
     ]
 );
 

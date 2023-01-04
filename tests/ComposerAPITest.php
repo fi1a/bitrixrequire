@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\BitrixRequire;
 
-use Fi1a\BitrixRequire\ComposerAPI;
+use Fi1a\BitrixRequire\ComposerApi;
 use Fi1a\Unit\BitrixRequire\TestCases\ModuleTestCase;
 
 /**
@@ -17,7 +17,7 @@ class ComposerAPITest extends ModuleTestCase
      */
     public function testRequire(): void
     {
-        $composer = new ComposerAPI();
+        $composer = new ComposerApi();
         $result = $composer->require('fi1a/format', '^2.0');
         $this->assertTrue($result->isSuccess());
     }
@@ -29,7 +29,7 @@ class ComposerAPITest extends ModuleTestCase
      */
     public function testFail(): void
     {
-        $composer = new ComposerAPI();
+        $composer = new ComposerApi();
         $result = $composer->require('fi1a/collection', '^1.0');
         $this->assertFalse($result->isSuccess());
     }
@@ -41,7 +41,7 @@ class ComposerAPITest extends ModuleTestCase
      */
     public function testRemove(): void
     {
-        $composer = new ComposerAPI();
+        $composer = new ComposerApi();
         $result = $composer->remove('fi1a/format');
         $this->assertTrue($result->isSuccess());
     }
