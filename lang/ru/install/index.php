@@ -1,5 +1,5 @@
 <?php
-$MESS['FBR_MODULE_NAME'] = 'Установка зависимостей';
+$MESS['FBR_MODULE_NAME'] = 'Обертка composer для установки зависимостей';
 $MESS['FBR_MODULE_DESCRIPTION'] = 'Осуществляет установку и подключение пакетов composer';
 $MESS['FBR_PARTNER_NAME'] = 'Fi1a';
 $MESS['FBR_RIGHT_D'] = 'закрыт';
