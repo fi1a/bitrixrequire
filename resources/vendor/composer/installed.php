@@ -3,7 +3,7 @@
         'name' => 'fi1a/resources',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'fac83da8756432ff4b0edcc059ebb5672ff0a10d',
+        'reference' => 'b568b2908cd8abd8baac6dbe399dcd8541b6704a',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'fi1a/resources' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'fac83da8756432ff4b0edcc059ebb5672ff0a10d',
+            'reference' => 'b568b2908cd8abd8baac6dbe399dcd8541b6704a',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
