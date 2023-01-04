@@ -10,7 +10,7 @@ use Fi1a\Unit\BitrixRequire\TestCases\ModuleTestCase;
 /**
  * API к командам composer
  */
-class ComposerTest extends ModuleTestCase
+class ComposerAPITest extends ModuleTestCase
 {
     /**
      * Установить пакет
