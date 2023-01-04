@@ -1,6 +1,7 @@
 <?php
 
 use Bitrix\Main\Application;
+use Bitrix\Main\IO\FileDeleteException;
 use Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\ModuleManager;
@@ -95,7 +96,7 @@ class fi1a_bitrixrequire extends CModule
     private function initPartnerInfo()
     {
         $this->PARTNER_NAME = Loc::getMessage('FBR_PARTNER_NAME');
-        $this->PARTNER_URI = 'https://github.com/fi1a/bitrixvalidation';
+        $this->PARTNER_URI = 'https://github.com/fi1a/bitrixrequire';
     }
 
     /**
@@ -174,6 +175,32 @@ class fi1a_bitrixrequire extends CModule
      */
     public function InstallFiles(): bool
     {
+        global $APPLICATION;
+
+        if (!is_writable($this->bitrixAdminDir)) {
+            $APPLICATION->ResetException();
+            $APPLICATION->ThrowException(Loc::getMessage('FBR_WRITE_ERROR_BITRIX_ADMIN_DIR'));
+
+            return false;
+        }
+
+        if (!$this->copyAdminFiles()) {
+            return false;
+        }
+
+        \CopyDirFiles(
+            $this->createPath($this->moduleDir, 'install', 'themes', '.default'),
+            $this->createPath(Application::getDocumentRoot(), BX_ROOT, 'themes', '.default'),
+            true,
+            true
+        );
+        \CopyDirFiles(
+            $this->createPath($this->moduleDir, 'install', 'components'),
+            $this->createPath(Application::getDocumentRoot(), BX_ROOT, 'components'),
+            true,
+            true
+        );
+
         return true;
     }
 
@@ -254,6 +281,30 @@ class fi1a_bitrixrequire extends CModule
      */
     public function UnInstallFiles(): bool
     {
+        global $APPLICATION;
+
+        if (!is_writable($this->bitrixAdminDir)) {
+            $APPLICATION->ResetException();
+            $APPLICATION->ThrowException(Loc::getMessage('FBV_WRITE_ERROR_BITRIX_ADMIN_DIR'));
+
+            return false;
+        }
+
+        if (!$this->unlinkAdminFiles()) {
+            return false;
+        }
+        if (!$this->unlinkComponents()) {
+            return false;
+        }
+
+        \DeleteDirFiles(
+            $this->createPath($this->moduleDir, 'install', 'themes', '.default'),
+            $this->createPath(Application::getDocumentRoot(), BX_ROOT, 'themes', '.default')
+        );
+        (new \Bitrix\Main\IO\Directory(
+            $this->createPath(Application::getDocumentRoot(), BX_ROOT, 'themes', '.default', 'icons', 'fi1a.bitrixvalidation')
+        ))->delete();
+
         return true;
     }
 
@@ -295,5 +346,167 @@ class fi1a_bitrixrequire extends CModule
         $parts = func_get_args();
 
         return str_replace([$separator, $separator . $separator, '//',], '/', '/' . implode('/', $parts));
+    }
+
+    /**
+     * Возвращает массив описывающий индивидуальную схему распределения прав модуля
+     *
+     * @return array
+     */
+    public function GetModuleRightList(): array
+    {
+        $rights = ['D', 'E', 'F', 'R', 'W',];
+        $reference = [];
+
+        foreach ($rights as $right) {
+            $reference[] = '[' . $right . '] ' . Loc::getMessage('FBR_RIGHT_' . $right);
+        }
+        unset($right);
+
+        return [
+            'reference_id' => $rights,
+            'reference' => $reference,
+        ];
+    }
+
+    /**
+     * Копирование файлов из папка admin модуля
+     *
+     * @return bool
+     *
+     * @throws \Bitrix\Main\IO\FileNotFoundException
+     */
+    private function copyAdminFiles(): bool
+    {
+        global $APPLICATION;
+
+        $relModuleDir = str_replace(Application::getDocumentRoot(), '', $this->moduleDir);
+
+        $moduleAdminDir = new \Bitrix\Main\IO\Directory($this->createPath($this->moduleDir, 'admin'));
+        foreach ($moduleAdminDir->getChildren() as $fileSystemEntry) {
+            if (!$fileSystemEntry->isFile()) {
+                continue;
+            }
+
+            /**
+             * @var \Bitrix\Main\IO\File $fileSystemEntry
+             */
+            if ('php' != $fileSystemEntry->getExtension() || 'menu.php' == $fileSystemEntry->getName()) {
+                continue;
+            }
+
+            $link = $this->createRelativePath($relModuleDir, 'admin', $fileSystemEntry->getName());
+            $linkFileContents = '<?php' . PHP_EOL . 'require $_SERVER[\'DOCUMENT_ROOT\']."' . $link . '";' . PHP_EOL;
+            $filePath = $this->createPath($this->bitrixAdminDir, $fileSystemEntry->getName());
+
+            if (!file_put_contents($filePath, $linkFileContents)) {
+                $APPLICATION->ResetException();
+                $APPLICATION->ThrowException(Loc::getMessage('FBR_WRITE_FILE_ERROR', ['#FILE_PATH#' => $filePath]));
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Удаление файлов совпадающих с файлой в папке admin
+     *
+     * @return bool
+     *
+     * @throws \Bitrix\Main\IO\FileNotFoundException
+     */
+    private function unlinkAdminFiles(): bool
+    {
+        global $APPLICATION;
+
+        $moduleAdminDir = new \Bitrix\Main\IO\Directory($this->createPath($this->moduleDir, 'admin'));
+        foreach ($moduleAdminDir->getChildren() as $fileSystemEntry) {
+            if (!$fileSystemEntry->isFile()) {
+                continue;
+            }
+
+            /**
+             * @var \Bitrix\Main\IO\File $fileSystemEntry
+             */
+            if ('php' != $fileSystemEntry->getExtension() || 'menu.php' == $fileSystemEntry->getName()) {
+                continue;
+            }
+
+            $filePath = $this->createPath($this->bitrixAdminDir, $fileSystemEntry->getName());
+            if (!is_file($filePath)) {
+                continue;
+            }
+            if (!unlink($filePath)) {
+                $APPLICATION->ResetException();
+                $APPLICATION->ThrowException(Loc::getMessage('FBR_DELETE_FILE_ERROR', ['#FILE_PATH#' => $filePath]));
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Удаляет компоненты модуля
+     *
+     * @return bool
+     *
+     * @throws \Bitrix\Main\IO\FileNotFoundException
+     */
+    private function unlinkComponents(): bool
+    {
+        global $APPLICATION;
+
+        $moduleComponentDir = new \Bitrix\Main\IO\Directory(
+            $this->createPath($this->moduleDir, 'install', 'components', 'fi1a')
+        );
+
+        foreach ($moduleComponentDir->getChildren() as $entry) {
+            if (!$entry->isDirectory()) {
+                continue;
+            }
+
+            try {
+                (new \Bitrix\Main\IO\Directory(
+                    $this->createPath(Application::getDocumentRoot(), BX_ROOT, 'components', 'fi1a', $entry->getName())
+                ))->delete();
+            } catch (FileDeleteException $exception) {
+                $APPLICATION->ResetException();
+                $APPLICATION->ThrowException($exception->getMessage());
+
+                return false;
+            }
+
+        }
+        unset($entry);
+
+        $componentDirectory = new \Bitrix\Main\IO\Directory(
+            $this->createPath(Application::getDocumentRoot(), BX_ROOT, 'components', 'fi1a')
+        );
+        $unlink = true;
+        foreach ($componentDirectory->getChildren() as $entry) {
+            if ($entry->isFile() || $entry->isDirectory()) {
+                $unlink = false;
+
+                break;
+            }
+        }
+        unset($entry);
+
+        if ($unlink) {
+            try {
+                $componentDirectory->delete();
+            } catch (FileDeleteException $exception) {
+                $APPLICATION->ResetException();
+                $APPLICATION->ThrowException($exception->getMessage());
+
+                return false;
+            }
+        }
+
+        return true;
     }
 }
