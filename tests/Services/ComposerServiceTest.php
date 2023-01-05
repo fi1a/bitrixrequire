@@ -43,6 +43,26 @@ class ComposerServiceTest extends TestCase
     }
 
     /**
+     * Установка
+     */
+    public function testInstall(): void
+    {
+        $service = $this->getService();
+        $result = $service->install();
+        $this->assertTrue($result->isSuccess());
+    }
+
+    /**
+     * Обновление
+     */
+    public function testUpdate(): void
+    {
+        $service = $this->getService();
+        $result = $service->update();
+        $this->assertTrue($result->isSuccess());
+    }
+
+    /**
      * Установленные пакеты
      *
      * @depends testRequire
