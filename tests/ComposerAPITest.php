@@ -35,6 +35,26 @@ class ComposerAPITest extends ModuleTestCase
     }
 
     /**
+     * Установка
+     */
+    public function testInstall(): void
+    {
+        $composer = new ComposerApi();
+        $result = $composer->install();
+        $this->assertTrue($result->isSuccess());
+    }
+
+    /**
+     * Обновление
+     */
+    public function testUpdate(): void
+    {
+        $composer = new ComposerApi();
+        $result = $composer->update();
+        $this->assertTrue($result->isSuccess());
+    }
+
+    /**
      * Удалить пакет
      *
      * @depends testRequire

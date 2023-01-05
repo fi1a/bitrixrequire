@@ -48,7 +48,37 @@ class Fi1aBitrixRequireAdminComponent extends CBitrixComponent implements Contro
                 ],
                 'postfilters' => []
             ],
+            'update' => [
+                'prefilters' => [
+                    new Authentication(),
+                    new Rights(static::MODULE_ID, 'F'),
+                    new HttpMethod(
+                        [HttpMethod::METHOD_POST,]
+                    ),
+                ],
+                'postfilters' => []
+            ],
+            'install' => [
+                'prefilters' => [
+                    new Authentication(),
+                    new Rights(static::MODULE_ID, 'F'),
+                    new HttpMethod(
+                        [HttpMethod::METHOD_POST,]
+                    ),
+                ],
+                'postfilters' => []
+            ],
             'show' => [
+                'prefilters' => [
+                    new Authentication(),
+                    new Rights(static::MODULE_ID, 'E'),
+                    new HttpMethod(
+                        [HttpMethod::METHOD_POST,]
+                    ),
+                ],
+                'postfilters' => []
+            ],
+            'suggest' => [
                 'prefilters' => [
                     new Authentication(),
                     new Rights(static::MODULE_ID, 'E'),
@@ -168,7 +198,7 @@ class Fi1aBitrixRequireAdminComponent extends CBitrixComponent implements Contro
      *
      * @return mixed[]|null
      */
-    public function requireAction(string $package, ?string $version = null)
+    public function requireAction(string $package, ?string $version = null): ?array
     {
         $service = new ComposerService();
 
@@ -193,18 +223,20 @@ class Fi1aBitrixRequireAdminComponent extends CBitrixComponent implements Contro
      *
      * @return mixed[]|null
      */
-    public function showAction()
+    public function showAction(): array
     {
         $service = new ComposerService();
 
         return [
             'installed' => $service->installed(),
             'all' => $service->all(),
-            'suggest' => $service->suggest(),
         ];
     }
 
-    public function removeAction(string $package)
+    /**
+     * Удаление
+     */
+    public function removeAction(string $package): ?array
     {
         $service = new ComposerService();
 
@@ -223,4 +255,65 @@ class Fi1aBitrixRequireAdminComponent extends CBitrixComponent implements Contro
             'all' => $service->all(),
         ];
     }
+
+    /**
+     * Обновление зависимостей
+     */
+    public function updateAction(): ?array
+    {
+        $service = new ComposerService();
+
+        try {
+            $result = $service->update();
+        } catch (InvalidArgumentException $exception) {
+            $this->addError(new Error($exception->getMessage()));
+
+            return null;
+        }
+
+        return [
+            'success' => $result->isSuccess(),
+            'output' => nl2br($result->getOutput()),
+            'installed' => $service->installed(),
+            'all' => $service->all(),
+        ];
+    }
+
+    /**
+     * Установка зависимостей из файла
+     */
+    public function installAction(): ?array
+    {
+        $service = new ComposerService();
+
+        try {
+            $result = $service->install();
+        } catch (InvalidArgumentException $exception) {
+            $this->addError(new Error($exception->getMessage()));
+
+            return null;
+        }
+
+        return [
+            'success' => $result->isSuccess(),
+            'output' => nl2br($result->getOutput()),
+            'installed' => $service->installed(),
+            'all' => $service->all(),
+        ];
+    }
+
+    /**
+     * Предложенные пакеты
+     *
+     * @return mixed[]
+     */
+    public function suggestAction(): array
+    {
+        $service = new ComposerService();
+
+        return [
+            'suggest' => $service->suggest(),
+        ];
+    }
+
 }

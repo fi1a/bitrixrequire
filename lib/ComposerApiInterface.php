@@ -23,4 +23,14 @@ interface ComposerApiInterface
      * Удалить пакет
      */
     public function remove(string $package): ResultInterface;
+
+    /**
+     * Обновление зависимостей
+     */
+    public function update(): ResultInterface;
+
+    /**
+     * Установка зависимостей из файла
+     */
+    public function install(): ResultInterface;
 }

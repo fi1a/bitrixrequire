@@ -45,7 +45,7 @@
             <div v-if="console === true">
               <div class="fbr-console">
                 <span>&gt;&gt;&gt;</span><br><br>
-                <div v-html="output"></div><br>
+                <div v-html="output"></div>
                 <span>&lt;&lt;&lt;</span><br>
               </div>
               <input class="fbr-clear-console" type="button" v-on:click="console = false" value="Скрыть">
@@ -64,7 +64,9 @@
         <div class="fbr-row2">
           <div class="fbr-col">
           </div>
-          <div class="fbr-col">
+          <div class="fbr-col fbr-text-align-right">
+            <input @click.prevent="update" type="button" value="Обновить" class="fbr-btn-update">
+            <input @click.prevent="install" type="button" value="Установить" class="fbr-btn-install">
           </div>
         </div>
       </div>
@@ -127,6 +129,7 @@ export default {
 
   mounted() {
     this.show();
+    this.showSuggest();
   },
 
   computed: {
@@ -152,6 +155,15 @@ export default {
   },
 
   methods: {
+    showSuggest() {
+      api.suggest().then((response) => {
+        this.suggest = response.data.suggest;
+      }).catch((response) => {
+        this.errors = response.errors;
+        this.loading = false;
+      });
+    },
+
     show() {
       this.loading = true;
 
@@ -159,7 +171,6 @@ export default {
         this.loading = false;
         this.installed = response.data.installed;
         this.all = response.data.all;
-        this.suggest = response.data.suggest;
       }).catch((response) => {
         this.errors = response.errors;
         this.loading = false;
@@ -200,6 +211,34 @@ export default {
       this.loading = true;
 
       api.remove(packageName).then((response) => {
+        this.loading = false;
+        this.showConsole(response.data.output);
+        this.installed = response.data.installed;
+        this.all = response.data.all;
+      }).catch((response) => {
+        this.errors = response.errors;
+        this.loading = false;
+      });
+    },
+
+    update() {
+      this.loading = true;
+
+      api.update().then((response) => {
+        this.loading = false;
+        this.showConsole(response.data.output);
+        this.installed = response.data.installed;
+        this.all = response.data.all;
+      }).catch((response) => {
+        this.errors = response.errors;
+        this.loading = false;
+      });
+    },
+
+    install() {
+      this.loading = true;
+
+      api.install().then((response) => {
         this.loading = false;
         this.showConsole(response.data.output);
         this.installed = response.data.installed;

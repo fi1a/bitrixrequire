@@ -56,6 +56,22 @@ class ComposerService implements ComposerServiceInterface
     /**
      * @inheritDoc
      */
+    public function update(): ResultInterface
+    {
+        return $this->composerApi->update();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function install(): ResultInterface
+    {
+        return $this->composerApi->install();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function installed(): array
     {
         $result = [];

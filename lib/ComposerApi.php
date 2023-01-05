@@ -72,6 +72,32 @@ class ComposerApi implements ComposerApiInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function update(): ResultInterface
+    {
+        $input = new ArrayInput([
+            'command' => 'update',
+            '--working-dir' => realpath(__DIR__ . '/../resources'),
+        ]);
+
+        return $this->runCommand($input);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function install(): ResultInterface
+    {
+        $input = new ArrayInput([
+            'command' => 'install',
+            '--working-dir' => realpath(__DIR__ . '/../resources'),
+        ]);
+
+        return $this->runCommand($input);
+    }
+
+    /**
      * Выполняет команду
      */
     private function runCommand(InputInterface $input): ResultInterface

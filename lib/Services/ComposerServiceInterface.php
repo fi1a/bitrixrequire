@@ -22,6 +22,16 @@ interface ComposerServiceInterface
     public function remove(string $package): ResultInterface;
 
     /**
+     * Обновление зависимостей
+     */
+    public function update(): ResultInterface;
+
+    /**
+     * Установка зависимостей из файла
+     */
+    public function install(): ResultInterface;
+
+    /**
      * Показать установленные пакеты
      *
      * @return string[]

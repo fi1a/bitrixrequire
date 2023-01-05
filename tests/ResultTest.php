@@ -19,7 +19,7 @@ class ResultTest extends TestCase
      */
     public function testResultSuccess(): void
     {
-        $result = new Result(true, 'output');
+        $result = new Result(true, 'clear[1G[2Koutput');
 
         $this->assertTrue($result->isSuccess());
         $this->assertEquals('output' . PHP_EOL, $result->getOutput());
