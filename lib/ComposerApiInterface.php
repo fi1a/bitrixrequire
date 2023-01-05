@@ -17,7 +17,7 @@ interface ComposerApiInterface
     /**
      * Установить пакет
      */
-    public function require(string $package, string $version): ResultInterface;
+    public function require(string $package, ?string $version = null): ResultInterface;
 
     /**
      * Удалить пакет

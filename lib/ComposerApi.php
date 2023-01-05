@@ -6,6 +6,7 @@ namespace Fi1a\BitrixRequire;
 
 use Composer\Console\Application;
 use Composer\Console\HtmlOutputFormatter;
+use InvalidArgumentException;
 use Symfony\Component\Console\Formatter\WrappableOutputFormatterInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -43,6 +44,9 @@ class ComposerApi implements ComposerApiInterface
      */
     public function require(string $package, ?string $version = null): ResultInterface
     {
+        if (!$package) {
+            throw new InvalidArgumentException('$package не может быть пустым');
+        }
         $requirePacket = $package;
         if ($version) {
             $requirePacket .= ':' . $version;
@@ -62,6 +66,10 @@ class ComposerApi implements ComposerApiInterface
      */
     public function remove(string $package): ResultInterface
     {
+        if (!$package) {
+            throw new InvalidArgumentException('$package не может быть пустым');
+        }
+
         $input = new ArrayInput([
             'command' => 'remove',
             'packages' => [$package],

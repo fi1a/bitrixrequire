@@ -5,6 +5,8 @@ use Bitrix\Main\IO\FileDeleteException;
 use Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\ModuleManager;
+use Fi1a\BitrixRequire\ORM\RequireTable;
+use Bitrix\Main\DB\Connection;
 
 Loc::loadMessages(__FILE__);
 
@@ -153,6 +155,8 @@ class fi1a_bitrixrequire extends CModule
             ModuleManager::registerModule($this->MODULE_ID);
             Loader::includeModule($this->MODULE_ID);
 
+            $this->createRequireTable($connection);
+
             $connection->commitTransaction();
         } catch (\Exception $e) {
             $connection->rollbackTransaction();
@@ -256,6 +260,8 @@ class fi1a_bitrixrequire extends CModule
             Loader::includeModule($this->MODULE_ID);
 
             $connection->startTransaction();
+
+            $this->dropRequireTable($connection);
 
             ModuleManager::unRegisterModule($this->MODULE_ID);
 
@@ -508,5 +514,32 @@ class fi1a_bitrixrequire extends CModule
         }
 
         return true;
+    }
+
+    /**
+     * Создать таблицу с зависимостями модулей
+     */
+    private function createRequireTable(Connection $connection): void
+    {
+        $tableName = RequireTable::getTableName();
+        if (!$connection->isTableExists($tableName)) {
+            $connection->createTable(
+                $tableName,
+                RequireTable::getMap(),
+                ['ID'],
+                ['ID']
+            );
+        }
+    }
+
+    /**
+     * Удаляем таблицу с зависимостями модулей
+     */
+    private function dropRequireTable(Connection $connection)
+    {
+        $tableName = RequireTable::getTableName();
+        if ($connection->isTableExists($tableName)) {
+            $connection->dropTable($tableName);
+        }
     }
 }

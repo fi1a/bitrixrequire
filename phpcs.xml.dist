@@ -465,6 +465,7 @@
     <!-- Force camelCase variables -->
     <rule ref="Squiz.NamingConventions.ValidVariableName">
         <exclude name="Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore" />
+        <exclude name="Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps" />
     </rule>
 
 </ruleset>

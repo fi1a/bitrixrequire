@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Fi1a\Unit\BitrixRequire\Services;
 
+use Fi1a\BitrixRequire\ModulePackages;
 use Fi1a\BitrixRequire\Services\ComposerService;
 use Fi1a\BitrixRequire\Services\ComposerServiceInterface;
+use Fi1a\Unit\BitrixRequire\TestCases\ModuleTestCase;
 use InvalidArgumentException;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Сервис
  */
-class ComposerServiceTest extends TestCase
+class ComposerServiceTest extends ModuleTestCase
 {
     /**
      * Возвращает сервис
@@ -29,6 +30,10 @@ class ComposerServiceTest extends TestCase
     {
         $service = $this->getService();
         $result = $service->require('fi1a/format', '^2.0');
+        $this->assertTrue($result->isSuccess());
+
+        $modulePackages = new ModulePackages();
+        $result = $modulePackages->require(self::MODULE_ID, 'fi1a/collection');
         $this->assertTrue($result->isSuccess());
     }
 
@@ -70,7 +75,7 @@ class ComposerServiceTest extends TestCase
     public function testInstalled(): void
     {
         $service = $this->getService();
-        $this->assertCount(1, $service->installed());
+        $this->assertCount(2, $service->installed());
     }
 
     /**
@@ -89,10 +94,26 @@ class ComposerServiceTest extends TestCase
      *
      * @depends testRequire
      */
+    public function testRemoveModuleException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $service = $this->getService();
+        $service->remove('fi1a/collection');
+    }
+
+    /**
+     * Уадаление пакета
+     *
+     * @depends testRequire
+     */
     public function testRemove(): void
     {
         $service = $this->getService();
         $result = $service->remove('fi1a/format');
+        $this->assertTrue($result->isSuccess());
+
+        $modulePackages = new ModulePackages();
+        $result = $modulePackages->remove(self::MODULE_ID, 'fi1a/collection');
         $this->assertTrue($result->isSuccess());
     }
 
