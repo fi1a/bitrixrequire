@@ -7,7 +7,7 @@ export default {
             'fi1a:bitrixrequire.admin',
             'require',
             {
-                mode:'class',
+                mode: 'class',
                 data: require,
             }
         );
@@ -21,7 +21,7 @@ export default {
             'fi1a:bitrixrequire.admin',
             'remove',
             {
-                mode:'class',
+                mode: 'class',
                 data: {
                     package: name
                 },
@@ -37,7 +37,46 @@ export default {
             'fi1a:bitrixrequire.admin',
             'show',
             {
-                mode:'class'
+                mode: 'class'
+            }
+        );
+    },
+
+    /**
+     * Список предложенных пакетов
+     */
+    suggest() {
+        return BX.ajax.runComponentAction(
+            'fi1a:bitrixrequire.admin',
+            'suggest',
+            {
+                mode: 'class'
+            }
+        );
+    },
+
+    /**
+     * Обновить зависимости
+     */
+    update() {
+        return BX.ajax.runComponentAction(
+            'fi1a:bitrixrequire.admin',
+            'update',
+            {
+                mode: 'class'
+            }
+        );
+    },
+
+    /**
+     * Установить из файла
+     */
+    install() {
+        return BX.ajax.runComponentAction(
+            'fi1a:bitrixrequire.admin',
+            'install',
+            {
+                mode: 'class'
             }
         );
     },

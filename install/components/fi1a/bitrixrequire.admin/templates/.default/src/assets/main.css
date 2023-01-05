@@ -160,3 +160,11 @@
 .fbr-empty-list {
     font-style: italic;
 }
+
+.fbr-text-align-right {
+    text-align: right;
+}
+
+.adm-workarea input[type="button"].fbr-btn-update {
+    margin-right: 15px;
+}
