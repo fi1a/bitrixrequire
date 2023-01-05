@@ -204,6 +204,7 @@ export default {
       }).catch((response) => {
         this.errors = response.errors;
         this.loading = false;
+        this.$scrollTop(document.getElementById('app').offsetTop);
       });
     },
 
@@ -218,6 +219,7 @@ export default {
       }).catch((response) => {
         this.errors = response.errors;
         this.loading = false;
+        this.$scrollTop(document.getElementById('app').offsetTop);
       });
     },
 
@@ -232,6 +234,7 @@ export default {
       }).catch((response) => {
         this.errors = response.errors;
         this.loading = false;
+        this.$scrollTop(document.getElementById('app').offsetTop);
       });
     },
 
@@ -246,6 +249,7 @@ export default {
       }).catch((response) => {
         this.errors = response.errors;
         this.loading = false;
+        this.$scrollTop(document.getElementById('app').offsetTop);
       });
     },
 

@@ -6,6 +6,7 @@ namespace Fi1a\Unit\BitrixRequire;
 
 use Fi1a\BitrixRequire\ComposerApi;
 use Fi1a\Unit\BitrixRequire\TestCases\ModuleTestCase;
+use InvalidArgumentException;
 
 /**
  * API к командам composer
@@ -20,6 +21,18 @@ class ComposerAPITest extends ModuleTestCase
         $composer = new ComposerApi();
         $result = $composer->require('fi1a/format', '^2.0');
         $this->assertTrue($result->isSuccess());
+        $result = $composer->require('fi1a/format', '^2.0');
+        $this->assertTrue($result->isSuccess());
+    }
+
+    /**
+     * Установить пакет
+     */
+    public function testRequireException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $composer = new ComposerApi();
+        $composer->require('', '^2.0');
     }
 
     /**
@@ -64,5 +77,15 @@ class ComposerAPITest extends ModuleTestCase
         $composer = new ComposerApi();
         $result = $composer->remove('fi1a/format');
         $this->assertTrue($result->isSuccess());
+    }
+
+    /**
+     * Установить пакет
+     */
+    public function testRemoveException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $composer = new ComposerApi();
+        $composer->remove('');
     }
 }
