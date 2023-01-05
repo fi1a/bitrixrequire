@@ -12,9 +12,11 @@ use Bitrix\Main\Engine\ActionFilter\Authentication;
 use Bitrix\Main\Engine\ActionFilter\HttpMethod;
 use Bitrix\Main\Localization\Loc;
 use Fi1a\BitrixRequire\ActionFilter\Rights;
+use Fi1a\BitrixRequire\Services\ComposerService;
 
 class Fi1aBitrixRequireAdminComponent extends CBitrixComponent implements Controllerable, Errorable
 {
+
     const MODULE_ID = 'fi1a.bitrixrequire';
 
     /** @var  ErrorCollection */
@@ -26,7 +28,27 @@ class Fi1aBitrixRequireAdminComponent extends CBitrixComponent implements Contro
     public function configureActions()
     {
         return [
-            'getList' => [
+            'require' => [
+                'prefilters' => [
+                    new Authentication(),
+                    new Rights(static::MODULE_ID, 'F'),
+                    new HttpMethod(
+                        [HttpMethod::METHOD_POST,]
+                    ),
+                ],
+                'postfilters' => []
+            ],
+            'remove' => [
+                'prefilters' => [
+                    new Authentication(),
+                    new Rights(static::MODULE_ID, 'F'),
+                    new HttpMethod(
+                        [HttpMethod::METHOD_POST,]
+                    ),
+                ],
+                'postfilters' => []
+            ],
+            'show' => [
                 'prefilters' => [
                     new Authentication(),
                     new Rights(static::MODULE_ID, 'E'),
@@ -53,6 +75,7 @@ class Fi1aBitrixRequireAdminComponent extends CBitrixComponent implements Contro
 
     /**
      * Adds error to error collection.
+     *
      * @param Error $error Error.
      *
      * @return $this
@@ -66,6 +89,7 @@ class Fi1aBitrixRequireAdminComponent extends CBitrixComponent implements Contro
 
     /**
      * Getting array of errors.
+     *
      * @return Error[]
      */
     public function getErrors()
@@ -75,7 +99,9 @@ class Fi1aBitrixRequireAdminComponent extends CBitrixComponent implements Contro
 
     /**
      * Getting once error with the necessary code.
+     *
      * @param string $code Code of error.
+     *
      * @return Error
      */
     public function getErrorByCode($code)
@@ -135,5 +161,66 @@ class Fi1aBitrixRequireAdminComponent extends CBitrixComponent implements Contro
         }
 
         $this->IncludeComponentTemplate();
+    }
+
+    /**
+     * Добавить пакет
+     *
+     * @return mixed[]|null
+     */
+    public function requireAction(string $package, ?string $version = null)
+    {
+        $service = new ComposerService();
+
+        try {
+            $result = $service->require($package, $version);
+        } catch (InvalidArgumentException $exception) {
+            $this->addError(new Error($exception->getMessage()));
+
+            return null;
+        }
+
+        return [
+            'success' => $result->isSuccess(),
+            'output' => nl2br($result->getOutput()),
+            'installed' => $service->installed(),
+            'all' => $service->all(),
+        ];
+    }
+
+    /**
+     * Установленные пакеты
+     *
+     * @return mixed[]|null
+     */
+    public function showAction()
+    {
+        $service = new ComposerService();
+
+        return [
+            'installed' => $service->installed(),
+            'all' => $service->all(),
+            'suggest' => $service->suggest(),
+        ];
+    }
+
+    public function removeAction(string $package)
+    {
+        $service = new ComposerService();
+
+        try {
+            $result = $service->remove($package);
+        } catch (InvalidArgumentException $exception) {
+            $this->addError(new Error($exception->getMessage()));
+
+            return null;
+        }
+
+        return [
+            'success' => $result->isSuccess(),
+            'output' => nl2br($result->getOutput()),
+            'installed' => $service->installed(),
+            'all' => $service->all(),
+        ];
     }
 }

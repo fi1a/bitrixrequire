@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\StreamOutput;
 /**
  * API к командам composer
  */
-class ComposerAPI implements ComposerAPIInterface
+class ComposerApi implements ComposerApiInterface
 {
     /**
      * @var WrappableOutputFormatterInterface
@@ -27,15 +27,23 @@ class ComposerAPI implements ComposerAPIInterface
             $formatter = new HtmlOutputFormatter();
         }
         $this->formatter = $formatter;
-        putenv('COMPOSER_HOME=' . realpath(__DIR__ . '/../resources/vendor/bin/composer'));
+        putenv('COMPOSER_HOME=' . $this->getVendorDir());
     }
 
     /**
      * @inheritDoc
      */
-    public function require(string $packet, ?string $version = null): ResultInterface
+    public function getVendorDir(): string
     {
-        $requirePacket = $packet;
+        return realpath(__DIR__ . '/../resources');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function require(string $package, ?string $version = null): ResultInterface
+    {
+        $requirePacket = $package;
         if ($version) {
             $requirePacket .= ':' . $version;
         }
@@ -52,11 +60,11 @@ class ComposerAPI implements ComposerAPIInterface
     /**
      * @inheritDoc
      */
-    public function remove(string $packet): ResultInterface
+    public function remove(string $package): ResultInterface
     {
         $input = new ArrayInput([
             'command' => 'remove',
-            'packages' => [$packet],
+            'packages' => [$package],
             '--working-dir' => realpath(__DIR__ . '/../resources'),
         ]);
 

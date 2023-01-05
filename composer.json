@@ -1,7 +1,7 @@
 {
   "name": "fi1a/bitrixrequire",
   "type": "bitrix-d7-module",
-  "description": "Модуль 1С-Битрикс \"Обертка composer для установки зависимостей\"",
+  "description": "Модуль 1С-Битрикс \"Обертка над composer для установки зависимостей\"",
   "keywords": [],
   "homepage": "https://github.com/fi1a/bitrixrequire",
   "license": "MIT",
