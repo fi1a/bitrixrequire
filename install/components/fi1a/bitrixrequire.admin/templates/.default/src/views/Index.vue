@@ -14,8 +14,8 @@
       <div class="fbr-group">
         <div class="fbr-row2">
           <div class="fbr-col">
-            <PackageName @update="v$.require.package.$model = $event"/>
-            <PackageVersion @update="v$.require.version.$model = $event"/>
+            <PackageName :value="this.state.require.package" @update="v$.require.package.$model = $event" @enter="require"/>
+            <PackageVersion :value="this.state.require.version" @update="v$.require.version.$model = $event" @enter="require"/>
             <input @click.prevent="require" :disabled="v$.require.$invalid" type="button" value="Добавить" class="adm-btn-green fbr-package-require">
           </div>
           <div class="fbr-col">
@@ -25,29 +25,21 @@
       <div class="fbr-group">
         <div class="fbr-row2">
           <div class="fbr-col white">
-            <h2>Установленные</h2>
-            <table class="fbr-package-list">
-              <tr>
-                <td>
-                  <div class="fbr-package-item-name">fi1a/collection:^2.0</div>
-                  <div class="fbr-package-item-description">Структуры данных и коллекции в PHP</div>
-                  <div><a href="https://github.com/fi1a/collection">https://github.com/fi1a/collection</a></div>
-                </td>
-                <td class="fbr-package-remove-container">
-                  <input type="button" v-on:click="console = true"  value="Удалить">
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="fbr-package-item-name">fi1a/collection:^2.0</div>
-                  <div class="fbr-package-item-description">Структуры данных и коллекции в PHP</div>
-                  <div><a target="_blank" href="https://github.com/fi1a/collection">https://github.com/fi1a/collection</a></div>
-                </td>
-                <td class="fbr-package-remove-container">
-                  <input type="button" v-on:click="console = true" value="Удалить">
-                </td>
-              </tr>
-            </table>
+            <div class="fbr-suggest-packages">
+              <h2>Добавленные</h2>
+              <table class="fbr-package-list">
+                <tr v-if="!installed.length">
+                  <td class="fbr-empty-list" colspan="2">нет добавленных пакетов</td>
+                </tr>
+                <InstalledPackageItem v-for="packageItem in installed" :package="packageItem" @remove="remove($event)" />
+              </table>
+              <template v-if="all.length">
+                <h2>Все зависимости</h2>
+                <table class="fbr-package-list">
+                  <AllPackageItem v-for="packageItem in all" :package="packageItem" @remove="remove($event)" />
+                </table>
+              </template>
+            </div>
           </div>
           <div class="fbr-col white">
             <div v-if="console === true">
@@ -62,66 +54,7 @@
             <div v-if="console === false" class="fbr-suggest-packages">
               <h2>Предложенные</h2>
               <table class="fbr-package-list">
-                <tr>
-                  <td>
-                    <div class="fbr-package-item-name">fi1a/collection:^2.0</div>
-                    <div class="fbr-package-item-description">Структуры данных и коллекции в PHP</div>
-                    <div><a href="https://github.com/fi1a/collection">https://github.com/fi1a/collection</a></div>
-                  </td>
-                  <td class="fbr-package-remove-container">
-                    <input type="button" v-on:click="console = true"  value="Добавить" class="adm-btn-green">
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="fbr-package-item-name">fi1a/collection:^2.0</div>
-                    <div class="fbr-package-item-description">Структуры данных и коллекции в PHP</div>
-                    <div><a target="_blank" href="https://github.com/fi1a/collection">https://github.com/fi1a/collection</a></div>
-                  </td>
-                  <td class="fbr-package-add-container">
-                    <input type="button" v-on:click="console = true"  value="Добавить" class="adm-btn-green">
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="fbr-package-item-name">fi1a/collection:^2.0</div>
-                    <div class="fbr-package-item-description">Структуры данных и коллекции в PHP</div>
-                    <div><a target="_blank" href="https://github.com/fi1a/collection">https://github.com/fi1a/collection</a></div>
-                  </td>
-                  <td class="fbr-package-add-container">
-                    <input type="button" v-on:click="console = true"  value="Добавить" class="adm-btn-green">
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="fbr-package-item-name">fi1a/collection:^2.0</div>
-                    <div class="fbr-package-item-description">Структуры данных и коллекции в PHP</div>
-                    <div><a target="_blank" href="https://github.com/fi1a/collection">https://github.com/fi1a/collection</a></div>
-                  </td>
-                  <td class="fbr-package-add-container">
-                    <input type="button" v-on:click="console = true"  value="Добавить" class="adm-btn-green">
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="fbr-package-item-name">fi1a/collection:^2.0</div>
-                    <div class="fbr-package-item-description">Структуры данных и коллекции в PHP</div>
-                    <div><a target="_blank" href="https://github.com/fi1a/collection">https://github.com/fi1a/collection</a></div>
-                  </td>
-                  <td class="fbr-package-add-container">
-                    <input type="button" v-on:click="console = true"  value="Добавить" class="adm-btn-green">
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="fbr-package-item-name">fi1a/collection:^2.0</div>
-                    <div class="fbr-package-item-description">Структуры данных и коллекции в PHP</div>
-                    <div><a target="_blank" href="https://github.com/fi1a/collection">https://github.com/fi1a/collection</a></div>
-                  </td>
-                  <td class="fbr-package-add-container">
-                    <input type="button" v-on:click="console = true"  value="Добавить" class="adm-btn-green">
-                  </td>
-                </tr>
+                <SuggestPackageItem v-for="packageItem in suggestWithoutInstalled" :package="packageItem" @require="doRequire($event)" />
               </table>
             </div>
           </div>
@@ -147,13 +80,16 @@ import {required} from '@vuelidate/validators'
 import {useVuelidate} from "@vuelidate/core";
 import PackageName from "@/components/PackageName.vue";
 import PackageVersion from "@/components/PackageVersion.vue";
+import InstalledPackageItem from "@/components/InstalledPackageItem.vue";
+import AllPackageItem from "@/components/AllPackageItem.vue";
+import SuggestPackageItem from "@/components/SuggestPackageItem.vue";
 import Spinner from "@/components/Spinner.vue";
 import api from "./../api/api";
 
 export default {
   name: 'Index',
 
-  components: {PackageName, PackageVersion, Spinner},
+  components: {PackageName, PackageVersion, Spinner, InstalledPackageItem, AllPackageItem, SuggestPackageItem},
 
   setup () {
     const state = reactive({
@@ -181,28 +117,93 @@ export default {
     return {
       loading: true,
       errors: [],
-
       console: false,
-      output: ''
+      output: '',
+      installed: [],
+      all: [],
+      suggest: []
     }
   },
 
   mounted() {
-    this.loading = false;
+    this.show();
+  },
+
+  computed: {
+    suggestWithoutInstalled() {
+      let suggest = [];
+
+      this.suggest.forEach((packageItem) => {
+        let inInstalled = false;
+
+        this.all.forEach((packageItemInstalled) => {
+          if (packageItem.package === packageItemInstalled.package) {
+            inInstalled = true;
+          }
+        })
+
+        if (!inInstalled) {
+          suggest.push(packageItem);
+        }
+      })
+
+      return suggest;
+    }
   },
 
   methods: {
+    show() {
+      this.loading = true;
+
+      api.show().then((response) => {
+        this.loading = false;
+        this.installed = response.data.installed;
+        this.all = response.data.all;
+        this.suggest = response.data.suggest;
+      }).catch((response) => {
+        this.errors = response.errors;
+        this.loading = false;
+      });
+    },
+
     require() {
       this.v$.require.$touch();
       if (this.v$.require.$error) {
         return;
       }
 
+      this.doRequire(this.state.require.package, this.state.require.version)
+    },
+
+    doRequire(packageName, packageVersion = null) {
       this.reset();
 
-      api.require(this.state.require).then((response) => {
+      api.require({
+        package: packageName,
+        version: packageVersion,
+      }).then((response) => {
         this.loading = false;
         this.showConsole(response.data.output);
+        if (response.data.success) {
+          this.state.require.package = '';
+          this.state.require.version = '';
+        }
+        this.installed = response.data.installed;
+        this.all = response.data.all;
+      }).catch((response) => {
+        this.errors = response.errors;
+        this.loading = false;
+      });
+    },
+
+    remove(packageName) {
+      this.loading = true;
+
+      api.remove(packageName).then((response) => {
+        this.loading = false;
+        this.showConsole(response.data.output);
+        this.installed = response.data.installed;
+        this.all = response.data.all;
       }).catch((response) => {
         this.errors = response.errors;
         this.loading = false;

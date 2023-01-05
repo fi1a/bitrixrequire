@@ -27,7 +27,15 @@ class ComposerApi implements ComposerApiInterface
             $formatter = new HtmlOutputFormatter();
         }
         $this->formatter = $formatter;
-        putenv('COMPOSER_HOME=' . realpath(__DIR__ . '/../resources'));
+        putenv('COMPOSER_HOME=' . $this->getVendorDir());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getVendorDir(): string
+    {
+        return realpath(__DIR__ . '/../resources');
     }
 
     /**

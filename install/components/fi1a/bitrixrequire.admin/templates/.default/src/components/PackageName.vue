@@ -1,6 +1,6 @@
 <template>
   <div class="fbr-package-name">
-    <input @input="$emit('update', $event.target.value)" type="text" tabindex="1" placeholder="Название пакета" autocomplete="off">
+    <input :value="value" @input="$emit('update', $event.target.value)" v-on:keyup.enter="$emit('enter')" type="text" tabindex="1" placeholder="Название пакета" autocomplete="off">
 
     <!--<div class="suggest">
       <ul>
@@ -25,7 +25,7 @@ export default {
   name: 'PackageName',
 
   props: {
-    errors: Object
+    value: String
   },
 
   data() {

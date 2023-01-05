@@ -10,6 +10,11 @@ namespace Fi1a\BitrixRequire;
 interface ComposerApiInterface
 {
     /**
+     *  Возвращает папку с vendor
+     */
+    public function getVendorDir(): string;
+
+    /**
      * Установить пакет
      */
     public function require(string $package, string $version): ResultInterface;

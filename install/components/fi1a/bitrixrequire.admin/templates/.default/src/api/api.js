@@ -12,4 +12,33 @@ export default {
             }
         );
     },
+
+    /**
+     * Удалить пакет
+     */
+    remove(name) {
+        return BX.ajax.runComponentAction(
+            'fi1a:bitrixrequire.admin',
+            'remove',
+            {
+                mode:'class',
+                data: {
+                    package: name
+                },
+            }
+        );
+    },
+
+    /**
+     * Список установленных пакетов
+     */
+    show() {
+        return BX.ajax.runComponentAction(
+            'fi1a:bitrixrequire.admin',
+            'show',
+            {
+                mode:'class'
+            }
+        );
+    },
 }
