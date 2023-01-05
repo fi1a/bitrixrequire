@@ -7,6 +7,8 @@ namespace Fi1a\Unit\BitrixRequire;
 use Fi1a\BitrixRequire\Result;
 use PHPUnit\Framework\TestCase;
 
+use const PHP_EOL;
+
 /**
  * Результат выполнения
  */
@@ -20,7 +22,7 @@ class ResultTest extends TestCase
         $result = new Result(true, 'output');
 
         $this->assertTrue($result->isSuccess());
-        $this->assertEquals('output', $result->getOutput());
+        $this->assertEquals('output' . PHP_EOL, $result->getOutput());
     }
 
     /**
@@ -31,6 +33,6 @@ class ResultTest extends TestCase
         $result = new Result(false, '');
 
         $this->assertFalse($result->isSuccess());
-        $this->assertEquals('', $result->getOutput());
+        $this->assertEquals('' . PHP_EOL, $result->getOutput());
     }
 }
