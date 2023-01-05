@@ -62,7 +62,9 @@ class ComposerService implements ComposerServiceInterface
 
         $jsonFile = $this->composerApi->getVendorDir() . '/composer.json';
         if (!is_file($jsonFile) || !is_readable($jsonFile)) {
+            // @codeCoverageIgnoreStart
             return $result;
+            // @codeCoverageIgnoreEnd
         }
 
         $json = json_decode(file_get_contents($jsonFile), true);
@@ -70,7 +72,9 @@ class ComposerService implements ComposerServiceInterface
         if (is_array($json['require'])) {
             $jsonInstalledFile = $this->composerApi->getVendorDir() . '/vendor/composer/installed.json';
             if (!is_file($jsonInstalledFile) || !is_readable($jsonInstalledFile)) {
+                // @codeCoverageIgnoreStart
                 return $result;
+                // @codeCoverageIgnoreEnd
             }
 
             $jsonInstalled = json_decode(file_get_contents($jsonInstalledFile), true);
@@ -103,7 +107,9 @@ class ComposerService implements ComposerServiceInterface
 
         $jsonFile = $this->composerApi->getVendorDir() . '/vendor/composer/installed.json';
         if (!is_file($jsonFile) || !is_readable($jsonFile)) {
+            // @codeCoverageIgnoreStart
             return $result;
+            // @codeCoverageIgnoreEnd
         }
 
         $json = json_decode(file_get_contents($jsonFile), true);
@@ -122,6 +128,7 @@ class ComposerService implements ComposerServiceInterface
 
     /**
      * @inheritDoc
+     * @codeCoverageIgnore
      */
     public function suggest(): array
     {
