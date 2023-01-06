@@ -190,7 +190,7 @@ class ComposerService implements ComposerServiceInterface
     {
         $cache = Cache::createInstance();
 
-        if ($cache->initCache(60 * 60 * 60 * 48, 'composer-suggest')) {
+        if ($cache->initCache(60 * 60 * 48, 'composer-suggest')) {
             return $cache->getVars();
         }
 

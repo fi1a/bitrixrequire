@@ -1,4 +1,6 @@
 {
-    "name": "fi1a/resources",
-    "type": "project"
+    "name": "vendor/name",
+    "type": "project",
+    "require": {
+    }
 }
