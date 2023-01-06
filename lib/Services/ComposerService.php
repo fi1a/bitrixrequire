@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Fi1a\BitrixRequire\Services;
 
-use Bitrix\Main\Data\Cache;
 use Bitrix\Main\Web\HttpClient;
 use CModule;
 use Fi1a\BitrixRequire\ComposerApi;
@@ -188,57 +187,15 @@ class ComposerService implements ComposerServiceInterface
      */
     public function suggest(): array
     {
-        $cache = Cache::createInstance();
-
-        if ($cache->initCache(60 * 60 * 48, 'composer-suggest')) {
-            return $cache->getVars();
-        }
-
-        $result = [];
-
         $httpClient = new HttpClient();
         $response = $httpClient->get(
-            'https://packagist.org/packages/list.json?vendor=fi1a&fields[]=type'
+            'https://raw.githubusercontent.com/fi1a/bitrixrequire/main/resources/suggest.json'
         );
 
-        if ($httpClient->getStatus() !== 200) {
-            return $result;
+        if ($httpClient->getStatus() !== 200 || !$response) {
+            return [];
         }
 
-        $packages = json_decode($response, true);
-
-        foreach ($packages['packages'] as $packageName => $type) {
-            if ($type['type'] === 'bitrix-d7-module' || $packageName === 'fi1a/installer') {
-                continue;
-            }
-
-            $response = $httpClient->get(
-                'https://repo.packagist.org/p2/' . $packageName . '.json'
-            );
-
-            if ($httpClient->getStatus() !== 200) {
-                continue;
-            }
-
-            $package = json_decode($response, true);
-            $item = reset($package['packages'][$packageName]);
-
-            if (!$item) {
-                continue;
-            }
-
-            $result[] = [
-                'package' => $item['name'],
-                'version' => $item['version'],
-                'description' => $item['description'] ?? null,
-                'homepage' => $item['homepage'] ?? null,
-            ];
-        }
-
-        if ($cache->startDataCache()) {
-            $cache->endDataCache($result);
-        }
-
-        return $result;
+        return json_decode($response, true);
     }
 }
