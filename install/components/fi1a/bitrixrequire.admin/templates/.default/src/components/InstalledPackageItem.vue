@@ -15,7 +15,7 @@
       </div>
     </td>
     <td class="fbr-package-remove-container">
-      <input v-if="!package.modules.length" type="button" @click="$emit('remove', package.package)"  value="Удалить">
+      <input v-if="!package.modules.length && $right >= 'F'" type="button" @click="$emit('remove', package.package)"  value="Удалить">
     </td>
   </tr>
 </template>

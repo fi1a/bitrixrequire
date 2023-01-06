@@ -10,13 +10,15 @@
         <div class="adm-info-message-icon"></div>
       </div>
     </div>
-    <div>
+    <div v-if="$right >= 'E'">
       <div class="fbr-group">
         <div class="fbr-row2">
           <div class="fbr-col">
-            <PackageName :value="this.state.require.package" @update="v$.require.package.$model = $event" @enter="require"/>
-            <PackageVersion :value="this.state.require.version" @update="v$.require.version.$model = $event" @enter="require"/>
-            <input @click.prevent="require" :disabled="v$.require.$invalid" type="button" value="Добавить" class="adm-btn-green fbr-package-require">
+            <template v-if="$right >= 'F'">
+              <PackageName :value="this.state.require.package" @update="v$.require.package.$model = $event" @enter="require"/>
+              <PackageVersion :value="this.state.require.version" @update="v$.require.version.$model = $event" @enter="require"/>
+              <input @click.prevent="require" :disabled="v$.require.$invalid" type="button" value="Добавить" class="adm-btn-green fbr-package-require">
+            </template>
           </div>
           <div class="fbr-col">
           </div>
@@ -65,8 +67,10 @@
           <div class="fbr-col">
           </div>
           <div class="fbr-col fbr-text-align-right">
-            <input @click.prevent="update" type="button" value="Обновить" class="fbr-btn-update">
-            <input @click.prevent="install" type="button" value="Установить" class="fbr-btn-install">
+            <template v-if="$right >= 'F'">
+              <input @click.prevent="update" type="button" value="Обновить" class="fbr-btn-update">
+              <input @click.prevent="install" type="button" value="Установить" class="fbr-btn-install">
+            </template>
           </div>
         </div>
       </div>
@@ -128,6 +132,13 @@ export default {
   },
 
   mounted() {
+    if (this.$right < 'E') {
+      this.loading = false;
+      this.errors = [{message: 'Недостаточно прав для просмотра'}];
+
+      return;
+    }
+
     this.show();
   },
 

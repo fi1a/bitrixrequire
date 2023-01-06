@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\BitrixRequire\Services;
 
+use Bitrix\Main\Data\Cache;
 use Bitrix\Main\Web\HttpClient;
 use CModule;
 use Fi1a\BitrixRequire\ComposerApi;
@@ -187,6 +188,12 @@ class ComposerService implements ComposerServiceInterface
      */
     public function suggest(): array
     {
+        $cache = Cache::createInstance();
+
+        if ($cache->initCache(60 * 60 * 48, 'package-suggests')) {
+            return $cache->getVars();
+        }
+
         $httpClient = new HttpClient();
         $response = $httpClient->get(
             'https://raw.githubusercontent.com/fi1a/bitrixrequire/main/resources/suggest.json'
@@ -196,6 +203,12 @@ class ComposerService implements ComposerServiceInterface
             return [];
         }
 
-        return json_decode($response, true);
+        $result = json_decode($response, true);
+
+        if ($cache->startDataCache()) {
+            $cache->endDataCache($result);
+        }
+
+        return $result;
     }
 }

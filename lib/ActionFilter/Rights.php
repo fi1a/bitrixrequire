@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\BitrixRequire\ActionFilter;
 
 use Bitrix\Main\Engine\ActionFilter\Base;
+use Bitrix\Main\Error;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
 use Fi1a\BitrixRequire\Helpers\ModuleRegistry;
@@ -42,6 +43,8 @@ class Rights extends Base
         $right = ModuleRegistry::getApplication()->GetGroupRight($this->moduleId);
 
         if ($right < $this->right) {
+            $this->addError(new Error('Нет прав на действие'));
+
             return new EventResult(EventResult::ERROR, null, null, $this);
         }
 

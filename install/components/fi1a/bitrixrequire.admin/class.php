@@ -2,7 +2,6 @@
 
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 
-use Bitrix\Main\Application;
 use Bitrix\Main\Loader;
 use Bitrix\Main\Engine\Contract\Controllerable;
 use Bitrix\Main\Errorable;
@@ -12,6 +11,7 @@ use Bitrix\Main\Engine\ActionFilter\Authentication;
 use Bitrix\Main\Engine\ActionFilter\HttpMethod;
 use Bitrix\Main\Localization\Loc;
 use Fi1a\BitrixRequire\ActionFilter\Rights;
+use Fi1a\BitrixRequire\Helpers\ModuleRegistry;
 use Fi1a\BitrixRequire\Services\ComposerService;
 
 class Fi1aBitrixRequireAdminComponent extends CBitrixComponent implements Controllerable, Errorable
@@ -160,12 +160,11 @@ class Fi1aBitrixRequireAdminComponent extends CBitrixComponent implements Contro
      */
     public function executeComponent()
     {
-        global $APPLICATION;
-
         $this->arResult = [
             'STATUS' => '',
             'ERRORS' => [],
             'LANGUAGE_ID' => LANGUAGE_ID,
+            'RIGHT' => ModuleRegistry::getApplication()->GetGroupRight(static::MODULE_ID),
         ];
         $moduleMode = Loader::includeSharewareModule(static::MODULE_ID);
 
@@ -180,8 +179,7 @@ class Fi1aBitrixRequireAdminComponent extends CBitrixComponent implements Contro
         }
 
         // Проверка прав
-        $right = $APPLICATION->GetGroupRight(static::MODULE_ID);
-        if ($right < 'E') {
+        if ($this->arResult['RIGHT'] < 'E') {
             $this->arResult['STATUS'] = 'ERROR';
             $this->arResult['ERRORS'][] = Loc::getMessage('FBR_NO_RIGHTS');
 
