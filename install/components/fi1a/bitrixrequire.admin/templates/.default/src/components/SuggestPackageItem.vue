@@ -6,7 +6,7 @@
       <div v-if="package.homepage"><a target="_blank" :href="package.homepage">{{package.homepage}}</a></div>
     </td>
     <td class="fbr-package-remove-container">
-      <input type="button" @click.prevent="$emit('require', package.package)"  value="Добавить" class="adm-btn-green">
+      <input v-if="$right >= 'F'" type="button" @click.prevent="$emit('require', package.package)"  value="Добавить" class="adm-btn-green">
     </td>
   </tr>
 </template>

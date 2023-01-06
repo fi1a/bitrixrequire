@@ -10,6 +10,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 ?>
 <script>
     window.I18N_LOCALE = '<?= $arResult['LANGUAGE_ID']?>';
+    window.FBR_RIGHT = '<?= $arResult['RIGHT']?>';
 </script>
 <?php
 

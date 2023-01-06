@@ -6,7 +6,7 @@
   },
   {
     "package": "fi1a/config",
-    "description": "Работа с файлами конфигурации. Поддерживает файлы PHP, JSON",
+    "description": "PHP работа с файлами конфигурации. Поддерживает файлы PHP, JSON",
     "homepage": "https://github.com/fi1a/config"
   },
   {
@@ -16,12 +16,12 @@
   },
   {
     "package": "fi1a/format",
-    "description": "Форматирование строковых шаблонов",
+    "description": "PHP форматирование строковых шаблонов",
     "homepage": "https://github.com/fi1a/format"
   },
   {
     "package": "fi1a/validation",
-    "description": "Валидация (проверка) значений формы",
+    "description": "PHP валидация (проверка) значений формы",
     "homepage": "https://github.com/fi1a/validation"
-  }
+  },
 ]

@@ -17,6 +17,8 @@ app.config.globalProperties.$scrollTop = (top) => {
     }, 20)
 }
 
+app.config.globalProperties.$right = window.FBR_RIGHT;
+
 app.use(i18n);
 
 app.component('Index', Index);

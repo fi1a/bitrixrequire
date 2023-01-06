@@ -115,6 +115,9 @@ class ComposerServiceTest extends ModuleTestCase
         $modulePackages = new ModulePackages();
         $result = $modulePackages->remove(self::MODULE_ID, 'fi1a/collection');
         $this->assertTrue($result->isSuccess());
+
+        $result = $service->remove('fi1a/collection');
+        $this->assertTrue($result->isSuccess());
     }
 
     /**
