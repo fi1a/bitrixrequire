@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Fi1a\BitrixRequire;
 
+use Bitrix\Main\Config\Option;
+use Bitrix\Main\HttpApplication;
 use Composer\Console\Application;
 use Composer\Console\HtmlOutputFormatter;
 use InvalidArgumentException;
@@ -36,7 +38,28 @@ class ComposerApi implements ComposerApiInterface
      */
     public function getVendorDir(): string
     {
-        return realpath(__DIR__ . '/../resources');
+        $path = Option::get('fi1a.bitrixrequire', 'COMPOSER_HOME', 'local');
+
+        if (
+            preg_match('/^([a-zA-Z]+)\:\\\*/mi', $path) === 0
+            && mb_substr($path, 0, 1) !== '/'
+        ) {
+            $path = HttpApplication::getDocumentRoot() . '/' . $path;
+        }
+
+        if (!is_dir($path)) {
+            // @codeCoverageIgnoreStart
+            mkdir($path, defined('BX_DIR_PERMISSIONS') ? BX_DIR_PERMISSIONS : 0776, true);
+            // @codeCoverageIgnoreEnd
+        }
+        if (!is_file($path . '/composer.json')) {
+            // @codeCoverageIgnoreStart
+            copy(__DIR__ . '/../resources/composer.json', $path . '/composer.json');
+            @chmod($path . '/composer.json', defined('BX_FILE_PERMISSIONS') ? BX_FILE_PERMISSIONS : 0665);
+            // @codeCoverageIgnoreEnd
+        }
+
+        return realpath($path);
     }
 
     /**
@@ -55,7 +78,7 @@ class ComposerApi implements ComposerApiInterface
         $input = new ArrayInput([
             'command' => 'require',
             'packages' => [$requirePacket],
-            '--working-dir' => realpath(__DIR__ . '/../resources'),
+            '--working-dir' => $this->getVendorDir(),
         ]);
 
         return $this->runCommand($input);
@@ -73,7 +96,7 @@ class ComposerApi implements ComposerApiInterface
         $input = new ArrayInput([
             'command' => 'remove',
             'packages' => [$package],
-            '--working-dir' => realpath(__DIR__ . '/../resources'),
+            '--working-dir' => $this->getVendorDir(),
         ]);
 
         return $this->runCommand($input);
@@ -86,7 +109,7 @@ class ComposerApi implements ComposerApiInterface
     {
         $input = new ArrayInput([
             'command' => 'update',
-            '--working-dir' => realpath(__DIR__ . '/../resources'),
+            '--working-dir' => $this->getVendorDir(),
         ]);
 
         return $this->runCommand($input);
@@ -99,7 +122,7 @@ class ComposerApi implements ComposerApiInterface
     {
         $input = new ArrayInput([
             'command' => 'install',
-            '--working-dir' => realpath(__DIR__ . '/../resources'),
+            '--working-dir' => $this->getVendorDir(),
         ]);
 
         return $this->runCommand($input);

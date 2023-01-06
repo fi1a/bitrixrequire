@@ -1,6 +1,7 @@
 <?php
 
 use Bitrix\Main\Application;
+use Bitrix\Main\Config\Option;
 use Bitrix\Main\IO\FileDeleteException;
 use Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
@@ -156,6 +157,7 @@ class fi1a_bitrixrequire extends CModule
             Loader::includeModule($this->MODULE_ID);
 
             $this->createRequireTable($connection);
+            $this->setSettings();
 
             $connection->commitTransaction();
         } catch (\Exception $e) {
@@ -262,6 +264,7 @@ class fi1a_bitrixrequire extends CModule
             $connection->startTransaction();
 
             $this->dropRequireTable($connection);
+            $this->deleteSettings();
 
             ModuleManager::unRegisterModule($this->MODULE_ID);
 
@@ -541,5 +544,28 @@ class fi1a_bitrixrequire extends CModule
         if ($connection->isTableExists($tableName)) {
             $connection->dropTable($tableName);
         }
+    }
+
+    /**
+     * Устанавливает настройки модуля
+     *
+     * @throws \Bitrix\Main\ArgumentException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\ObjectPropertyException
+     * @throws \Bitrix\Main\SystemException
+     */
+    private function setSettings()
+    {
+        Option::set($this->MODULE_ID, 'COMPOSER_HOME', 'local');
+    }
+
+    /**
+     * Удаляет настройки модуля
+     *
+     * @throws \Bitrix\Main\ArgumentNullException
+     */
+    private function deleteSettings()
+    {
+        Option::delete($this->MODULE_ID, []);
     }
 }
