@@ -1,0 +1,27 @@
+[
+  {
+    "package": "fi1a/collection",
+    "description": "Структуры данных и коллекции в PHP",
+    "homepage": "https://github.com/fi1a/collection"
+  },
+  {
+    "package": "fi1a/config",
+    "description": "Работа с файлами конфигурации. Поддерживает файлы PHP, JSON",
+    "homepage": "https://github.com/fi1a/config"
+  },
+  {
+    "package": "fi1a/console",
+    "description": "Консольные команды на PHP. Аргументы, опции и форматирование",
+    "homepage": "https://github.com/fi1a/console"
+  },
+  {
+    "package": "fi1a/format",
+    "description": "Форматирование строковых шаблонов",
+    "homepage": "https://github.com/fi1a/format"
+  },
+  {
+    "package": "fi1a/validation",
+    "description": "Валидация (проверка) значений формы",
+    "homepage": "https://github.com/fi1a/validation"
+  }
+]

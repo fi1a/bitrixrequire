@@ -51,7 +51,7 @@
               <input class="fbr-clear-console" type="button" v-on:click="console = false" value="Скрыть">
             </div>
 
-            <div v-if="console === false" class="fbr-suggest-packages">
+            <div v-if="console === false && suggestWithoutInstalled.length" class="fbr-suggest-packages">
               <h2>Предложенные</h2>
               <table class="fbr-package-list">
                 <SuggestPackageItem v-for="packageItem in suggestWithoutInstalled" :package="packageItem" @require="doRequire($event)" />
@@ -129,7 +129,6 @@ export default {
 
   mounted() {
     this.show();
-    this.showSuggest();
   },
 
   computed: {
@@ -160,7 +159,6 @@ export default {
         this.suggest = response.data.suggest;
       }).catch((response) => {
         this.errors = response.errors;
-        this.loading = false;
       });
     },
 
@@ -171,6 +169,8 @@ export default {
         this.loading = false;
         this.installed = response.data.installed;
         this.all = response.data.all;
+
+        this.showSuggest();
       }).catch((response) => {
         this.errors = response.errors;
         this.loading = false;
