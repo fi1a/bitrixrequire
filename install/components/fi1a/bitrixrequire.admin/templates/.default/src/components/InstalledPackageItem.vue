@@ -15,7 +15,7 @@
       </div>
     </td>
     <td class="fbr-package-remove-container">
-      <input v-if="!package.modules.length && $right >= 'F'" type="button" @click="$emit('remove', package.package)"  value="Удалить">
+      <input :disabled="$parent.loading" v-if="!package.modules.length && $root.canEdit()" type="button" @click="$emit('remove', package.package)"  value="Удалить">
     </td>
   </tr>
 </template>
