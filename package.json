@@ -1,0 +1,28 @@
+{
+  "name": "fi1a.bitrixrequire",
+  "version": "1.0.0",
+  "description": "Модуль 1С-Битрикс \"Обертка над composer для установки зависимостей\"",
+  "main": "gulpfile.js",
+  "scripts": {
+    "gulp": "./node_modules/.bin/gulp",
+    "build_last_version": "./node_modules/.bin/gulp build_last_version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fi1a/bitrixrequire.git"
+  },
+  "author": "",
+  "homepage": "https://github.com/fi1a/bitrixrequire",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-clean": "^0.3.2",
+    "gulp-file": "^0.4.0",
+    "gulp-git": "^2.4.2",
+    "gulp-iconv": "0.0.1",
+    "gulp-zip": "^4.0.0",
+    "moment": "^2.19.3",
+    "gulp4-run-sequence": "^1.0.1",
+    "gulp-flatten": "^0.4.0",
+    "node-run-cmd": "^1.0.1"
+  }
+}
