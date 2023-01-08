@@ -23,5 +23,5 @@
     "package": "fi1a/validation",
     "description": "PHP валидация (проверка) значений формы",
     "homepage": "https://github.com/fi1a/validation"
-  },
+  }
 ]
