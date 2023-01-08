@@ -19,7 +19,7 @@ $composerApi = new ComposerApi();
                     <input type="text" name="COMPOSER_HOME" size="60" value="<?= Option::get('fi1a.bitrixrequire', 'COMPOSER_HOME', 'local')?>">
                     <?php
                     echo BeginNote();
-                    echo 'Текущий путь: ' . $composerApi->getVendorDir();
+                    echo Loc::getMessage('FBR_COMPOSER_PATH') . ' ' . $composerApi->getVendorDir();
                     echo EndNote();
                     ?>
                 </td>
