@@ -1,6 +1,6 @@
 <template>
   <div class="fbr-package-name">
-    <input :value="value" @input="$emit('update', $event.target.value)" v-on:keyup.enter="$emit('enter')" v-on:keyup="searchSuggest" type="text" tabindex="1" placeholder="Название пакета" autocomplete="off">
+    <input :value="value" @input="$emit('update', $event.target.value)" v-on:keyup.enter="$emit('enter')" v-on:keyup="searchSuggest" type="text" tabindex="1" :placeholder="$t('packageName')" autocomplete="off">
     <div v-if="suggests.length" class="suggest">
       <ul>
         <li @click="selectSuggest(suggest.name)" v-for="suggest in suggests">{{suggest.name}}</li>

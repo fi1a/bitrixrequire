@@ -17,7 +17,7 @@
             <template v-if="$root.canEdit()">
               <PackageName :value="this.state.require.package" @update="v$.require.package.$model = $event" @enter="require"/>
               <PackageVersion :value="this.state.require.version" @update="v$.require.version.$model = $event" @enter="require"/>
-              <input @click.prevent="require" :disabled="v$.require.$invalid || loading" type="button" value="Добавить" class="adm-btn-green fbr-package-require">
+              <input @click.prevent="require" :disabled="v$.require.$invalid || loading" type="button" :value="$t('add')" class="adm-btn-green fbr-package-require">
             </template>
           </div>
           <div class="fbr-col">
@@ -28,15 +28,15 @@
         <div class="fbr-row2">
           <div class="fbr-col white">
             <div class="fbr-suggest-packages">
-              <h2>Добавленные</h2>
+              <h2>{{$t('addedTitle')}}</h2>
               <table class="fbr-package-list">
                 <tr v-if="!installed.length">
-                  <td class="fbr-empty-list" colspan="2">нет добавленных пакетов</td>
+                  <td class="fbr-empty-list" colspan="2">{{$t('empty')}}</td>
                 </tr>
                 <InstalledPackageItem v-for="packageItem in installed" :package="packageItem" @remove="remove($event)" />
               </table>
               <template v-if="all.length">
-                <h2>Все зависимости</h2>
+                <h2>{{$t('all')}}</h2>
                 <table class="fbr-package-list">
                   <AllPackageItem v-for="packageItem in all" :package="packageItem" @remove="remove($event)" />
                 </table>
@@ -50,11 +50,11 @@
                 <div v-html="output"></div>
                 <span>&lt;&lt;&lt;</span><br>
               </div>
-              <input class="fbr-clear-console" type="button" v-on:click="console = false" value="Скрыть">
+              <input class="fbr-clear-console" type="button" v-on:click="console = false" :value="$t('hide')">
             </div>
 
             <div v-if="console === false && suggestWithoutInstalled.length" class="fbr-suggest-packages">
-              <h2>Предложенные</h2>
+              <h2>{{$t('suggestsTitle')}}</h2>
               <table class="fbr-package-list">
                 <SuggestPackageItem v-for="packageItem in suggestWithoutInstalled" :package="packageItem" @require="doRequire($event)" />
               </table>
@@ -68,8 +68,8 @@
           </div>
           <div class="fbr-col fbr-text-align-right">
             <template v-if="$root.canEdit()">
-              <input @click.prevent="update" type="button" value="Обновить" class="fbr-btn-update">
-              <input @click.prevent="install" type="button" value="Установить" class="fbr-btn-install">
+              <input @click.prevent="update" type="button" :value="$t('update')" class="fbr-btn-update">
+              <input @click.prevent="install" type="button" :value="$t('install')" class="fbr-btn-install">
             </template>
           </div>
         </div>
@@ -134,7 +134,7 @@ export default {
   mounted() {
     if (!this.$root.canView()) {
       this.loading = false;
-      this.errors = [{message: 'Недостаточно прав для просмотра'}];
+      this.errors = [{message: this.$t('noRights')}];
 
       return;
     }

@@ -6,6 +6,7 @@ namespace Fi1a\BitrixRequire;
 
 use Bitrix\Main\Config\Option;
 use Bitrix\Main\HttpApplication;
+use Bitrix\Main\Localization\Loc;
 use Composer\Console\Application;
 use Composer\Console\HtmlOutputFormatter;
 use InvalidArgumentException;
@@ -68,7 +69,7 @@ class ComposerApi implements ComposerApiInterface
     public function require(string $package, ?string $version = null): ResultInterface
     {
         if (!$package) {
-            throw new InvalidArgumentException('$package не может быть пустым');
+            throw new InvalidArgumentException(Loc::getMessage('FBR_PACKAGE_CAN_NOT_BE_EMPTY'));
         }
         $requirePacket = $package;
         if ($version) {
@@ -90,7 +91,7 @@ class ComposerApi implements ComposerApiInterface
     public function remove(string $package): ResultInterface
     {
         if (!$package) {
-            throw new InvalidArgumentException('$package не может быть пустым');
+            throw new InvalidArgumentException(Loc::getMessage('FBR_PACKAGE_CAN_NOT_BE_EMPTY'));
         }
 
         $input = new ArrayInput([
