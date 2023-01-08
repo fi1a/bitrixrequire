@@ -128,6 +128,7 @@ class ComposerService implements ComposerServiceInterface
                         'moduleId' => $requireModule->get('MODULE_ID'),
                         'name' => $module ? $module->MODULE_NAME : null,
                         'description' => $module ? $module->MODULE_DESCRIPTION : null,
+                        'version' => $requireModule->get('VERSION'),
                     ];
                 }
 

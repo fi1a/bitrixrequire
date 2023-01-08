@@ -10,6 +10,7 @@
           <li v-for="module in package.modules">
             <template v-if="module.name"><b>&laquo;{{module.name}}&raquo;</b>&nbsp;</template>({{module.moduleId}})
             <template v-if="module.description"><br>{{module.description}}</template>
+            <template v-if="module.version"><br>Требуется версия пакета: {{module.version}}</template>
           </li>
         </ul>
       </div>
