@@ -191,7 +191,7 @@ class ComposerService implements ComposerServiceInterface
         $cache = Cache::createInstance();
 
         if ($cache->initCache(60 * 60 * 48, 'package-suggests')) {
-            return $cache->getVars();
+            return (array) $cache->getVars();
         }
 
         $httpClient = new HttpClient();

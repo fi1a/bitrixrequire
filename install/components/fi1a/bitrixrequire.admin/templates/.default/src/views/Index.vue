@@ -10,14 +10,14 @@
         <div class="adm-info-message-icon"></div>
       </div>
     </div>
-    <div v-if="$right >= 'E'">
+    <div v-if="$root.canView()">
       <div class="fbr-group">
         <div class="fbr-row2">
           <div class="fbr-col">
-            <template v-if="$right >= 'F'">
+            <template v-if="$root.canEdit()">
               <PackageName :value="this.state.require.package" @update="v$.require.package.$model = $event" @enter="require"/>
               <PackageVersion :value="this.state.require.version" @update="v$.require.version.$model = $event" @enter="require"/>
-              <input @click.prevent="require" :disabled="v$.require.$invalid" type="button" value="Добавить" class="adm-btn-green fbr-package-require">
+              <input @click.prevent="require" :disabled="v$.require.$invalid || loading" type="button" value="Добавить" class="adm-btn-green fbr-package-require">
             </template>
           </div>
           <div class="fbr-col">
@@ -67,7 +67,7 @@
           <div class="fbr-col">
           </div>
           <div class="fbr-col fbr-text-align-right">
-            <template v-if="$right >= 'F'">
+            <template v-if="$root.canEdit()">
               <input @click.prevent="update" type="button" value="Обновить" class="fbr-btn-update">
               <input @click.prevent="install" type="button" value="Установить" class="fbr-btn-install">
             </template>
@@ -132,7 +132,7 @@ export default {
   },
 
   mounted() {
-    if (this.$right < 'E') {
+    if (!this.$root.canView()) {
       this.loading = false;
       this.errors = [{message: 'Недостаточно прав для просмотра'}];
 
