@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fi1a\BitrixRequire\Services;
 
 use Bitrix\Main\Data\Cache;
+use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Web\HttpClient;
 use CModule;
 use Fi1a\BitrixRequire\ComposerApi;
@@ -37,7 +38,7 @@ class ComposerService implements ComposerServiceInterface
     public function require(string $package, ?string $version = null): ResultInterface
     {
         if (!$package) {
-            throw new InvalidArgumentException('Название пакета не может быть пустым');
+            throw new InvalidArgumentException(Loc::getMessage('FBR_PACKAGE_NAME_EMPTY_ERROR'));
         }
 
         return $this->composerApi->require($package, $version);
@@ -49,7 +50,7 @@ class ComposerService implements ComposerServiceInterface
     public function remove(string $package): ResultInterface
     {
         if (!$package) {
-            throw new InvalidArgumentException('Название пакета не может быть пустым');
+            throw new InvalidArgumentException(Loc::getMessage('FBR_PACKAGE_NAME_EMPTY_ERROR'));
         }
 
         $count = RequireTable::GetList([
@@ -61,7 +62,7 @@ class ComposerService implements ComposerServiceInterface
         ])->getCount();
 
         if ($count > 0) {
-            throw new InvalidArgumentException('Необходимо удалить модули перед удалением пакета');
+            throw new InvalidArgumentException(Loc::getMessage('FBR_NEED_REMOVE_MODULE_ERROR'));
         }
 
         return $this->composerApi->remove($package);

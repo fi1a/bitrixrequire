@@ -16,6 +16,10 @@ if (is_file($autoloadPath)) {
 }
 
 $classLocFilePaths = [
+    __DIR__ . '/lib/ActionFilter/Rights.php',
+    __DIR__ . '/lib/Services/ComposerService.php',
+    __DIR__ . '/lib/ComposerApi.php',
+    __DIR__ . '/lib/ModulePackages.php',
 ];
 
 foreach ($classLocFilePaths as $classLocFilePath) {

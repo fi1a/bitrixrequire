@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fi1a\BitrixRequire;
 
+use Bitrix\Main\Localization\Loc;
 use Fi1a\BitrixRequire\ORM\RequireTable;
 use InvalidArgumentException;
 
@@ -31,10 +32,10 @@ class ModulePackages implements ModulePackagesInterface
     public function require(string $moduleId, string $package, ?string $version = null): ResultInterface
     {
         if (!$moduleId) {
-            throw new InvalidArgumentException('$moduleId не может быть пустым');
+            throw new InvalidArgumentException(Loc::getMessage('FBR_MODULE_ID_CANT_BE_EMPTY'));
         }
         if (!$package) {
-            throw new InvalidArgumentException('$package не может быть пустым');
+            throw new InvalidArgumentException(Loc::getMessage('FBR_PACKAGE_CANT_BE_EMPTY'));
         }
 
         $result = $this->composerApi->require($package, $version);
@@ -68,10 +69,10 @@ class ModulePackages implements ModulePackagesInterface
     public function remove(string $moduleId, string $package): ResultInterface
     {
         if (!$moduleId) {
-            throw new InvalidArgumentException('$moduleId не может быть пустым');
+            throw new InvalidArgumentException(Loc::getMessage('FBR_MODULE_ID_CANT_BE_EMPTY'));
         }
         if (!$package) {
-            throw new InvalidArgumentException('$package не может быть пустым');
+            throw new InvalidArgumentException(Loc::getMessage('FBR_PACKAGE_CANT_BE_EMPTY'));
         }
 
         $require = RequireTable::query()

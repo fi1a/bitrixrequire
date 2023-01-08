@@ -8,6 +8,7 @@ use Bitrix\Main\Engine\ActionFilter\Base;
 use Bitrix\Main\Error;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
+use Bitrix\Main\Localization\Loc;
 use Fi1a\BitrixRequire\Helpers\ModuleRegistry;
 
 /**
@@ -43,7 +44,7 @@ class Rights extends Base
         $right = ModuleRegistry::getApplication()->GetGroupRight($this->moduleId);
 
         if ($right < $this->right) {
-            $this->addError(new Error('Нет прав на действие'));
+            $this->addError(new Error(Loc::getMessage('FBR_NO_RIGHTS')));
 
             return new EventResult(EventResult::ERROR, null, null, $this);
         }
