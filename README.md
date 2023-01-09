@@ -66,6 +66,16 @@ $result->isSuccess(); // true
 | string $moduleId         | Идентификатор вашего модуля                    |
 | string $package          | Название пакета от которого зависит ваш модуль |
 
+## Подключение vendor/autoload.php
+
+Для подключения vendor/autoload.php достаточно в файле php_interface/init.php подключить модуль 'fi1a.bitrixrequire':
+
+```php
+use Bitrix\Main\Loader;
+
+Loader::includeModule('fi1a.bitrixrequire');
+```
+
 [badge-license]: https://img.shields.io/github/license/fi1a/bitrixvalidation?style=flat-square
 [badge-mail]: https://img.shields.io/badge/mail-support%40fi1a.ru-brightgreen
 
