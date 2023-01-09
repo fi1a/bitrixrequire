@@ -4,10 +4,6 @@ import i18n from './i18n.js'
 import './assets/main.css'
 import Index from './views/Index.vue';
 
-if (typeof window.FBR_RIGHT === "undefined") {
-    window.location.reload();
-}
-
 const app = createApp(App);
 
 app.config.globalProperties.$scrollTop = (top) => {
@@ -21,7 +17,7 @@ app.config.globalProperties.$scrollTop = (top) => {
     }, 20)
 }
 
-app.config.globalProperties.$right = window.FBR_RIGHT;
+app.config.globalProperties.$right = document.getElementById('app').dataset.right;
 
 app.use(i18n);
 
