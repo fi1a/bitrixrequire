@@ -11,12 +11,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 $module = CModule::CreateModuleObject('fi1a.bitrixrequire');
 
 ?>
-<script type="text/javascript">
-    window.I18N_LOCALE = '<?= $arResult['LANGUAGE_ID']?>';
-    window.FBR_RIGHT = '<?= $arResult['RIGHT']?>';
-</script>
-
-<div id="app"></div>
+<div data-right="<?= $arResult['RIGHT']?>" data-locale="<?= $arResult['LANGUAGE_ID']?>" id="app"></div>
 
 <link rel="stylesheet" type="text/css" href="<?= $templateFolder?>/dist/style.css?v=<?= $module->MODULE_VERSION?>">
 <script type="module" src="<?= $templateFolder?>/dist/bitrixrequire.admin.js?v=<?= $module->MODULE_VERSION?>"></script>
