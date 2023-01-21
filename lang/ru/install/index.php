@@ -10,3 +10,4 @@ $MESS['FBR_RIGHT_W'] = 'полный доступ';
 $MESS['FBR_WRITE_ERROR_BITRIX_ADMIN_DIR'] = 'Нет доступа на запись в папке /bitrix/admin/';
 $MESS['FBR_WRITE_FILE_ERROR'] = 'Не удалось записать файл "#FILE_PATH#"';
 $MESS['FBR_DELETE_FILE_ERROR'] = 'Не удалось удалить файл "#FILE_PATH#"';
+$MESS['FBR_MODULES_REQUIREMENTS'] = '<br>Перед удалением модуля следует удалить зависимые модули:<br><ul>#MODULES#</ul>';
