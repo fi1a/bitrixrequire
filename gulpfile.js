@@ -241,7 +241,7 @@ gulp.task('diff', (callback) => {
 
         const globs = extendGlob(output.split(os.EOL));
 
-        gulp.src(globs, {base: './'})
+        gulp.src(globs, {base: './', allowEmpty: true})
             .pipe(gulp.dest(path.join(buildFolder, getVersionFolderName())))
             .on('end', callback);
     });
