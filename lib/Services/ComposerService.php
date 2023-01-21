@@ -125,7 +125,7 @@ class ComposerService implements ComposerServiceInterface
                 if (!isset($modules[$requireModule->get('MODULE_ID')])) {
                     $module = CModule::CreateModuleObject($requireModule->get('MODULE_ID'));
 
-                    $modules[$requireModule->get('MODULE_ID')] = [
+                    $modules[$requireModule->get('PACKAGE')] = [
                         'moduleId' => $requireModule->get('MODULE_ID'),
                         'name' => $module ? $module->MODULE_NAME : null,
                         'description' => $module ? $module->MODULE_DESCRIPTION : null,
@@ -133,7 +133,7 @@ class ComposerService implements ComposerServiceInterface
                     ];
                 }
 
-                $modulesByPackage[$requireModule->get('PACKAGE')][] = $modules[$requireModule->get('MODULE_ID')];
+                $modulesByPackage[$requireModule->get('PACKAGE')][] = $modules[$requireModule->get('PACKAGE')];
             }
 
             foreach (array_keys($json['require']) as $package) {
