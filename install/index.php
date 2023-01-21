@@ -225,6 +225,10 @@ class fi1a_bitrixrequire extends CModule
      */
     public function DoUninstall()
     {
+        if (!$this->checkModulesRequirements()) {
+           return false;
+        }
+
         if (!$this->UnInstallDB()) {
             return false;
         }
@@ -243,6 +247,47 @@ class fi1a_bitrixrequire extends CModule
         }
 
         return true;
+    }
+
+    /**
+     * Проверка на наличие зависимых модулей
+     */
+    public function checkModulesRequirements(): bool
+    {
+        Loader::includeModule($this->MODULE_ID);
+
+        $modules = [];
+
+        $iterator = RequireTable::query()
+            ->setSelect(['MODULE_ID'])
+            ->addGroup('MODULE_ID')
+            ->exec();
+
+        while ($require = $iterator->fetch()) {
+            $module = CModule::CreateModuleObject($require['MODULE_ID']);
+
+            if (!$module) {
+                continue;
+            }
+
+            $modules[] = '<li>' . $module->MODULE_NAME . ' (' . $require['MODULE_ID'] . ');</li>';
+        }
+
+        if (!count($modules)) {
+            return true;
+        }
+
+        global $APPLICATION;
+
+        $APPLICATION->ResetException();
+        $APPLICATION->ThrowException(
+            Loc::getMessage(
+                'FBR_MODULES_REQUIREMENTS',
+                ['#MODULES#' => implode('', $modules)]
+            )
+        );
+
+        return false;
     }
 
     /**
