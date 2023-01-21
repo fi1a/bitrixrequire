@@ -37,7 +37,9 @@ const extendGlob = glob => {
     if (typeof glob === 'string') {
         globs.push(glob);
     } else {
-        globs = glob;
+        globs = glob.filter((el) => {
+            return el !== null && el !== '';
+        });
     }
 
     globs.push('!{node_modules,node_modules/**}');
@@ -210,7 +212,7 @@ gulp.task('version', () => {
     const version = getVersionFolderName();
     const fileContent = createVersionFileContent(lastVersion.version, lastVersion.date);
 
-    return gulp.src(path.join(buildFolder, version, 'install', 'version.php'))
+    return gulp.src(path.join(buildFolder, version, 'install', 'version.php'), {allowEmpty: true})
         .pipe(file('version.php', fileContent))
         .pipe(gulp.dest(path.join(buildFolder, version, 'install')));
 });
@@ -223,7 +225,7 @@ gulp.task('update', () => {
         path.join('.', 'installers', 'versions', version, 'updater.php'),
         path.join('.', 'installers', 'versions', version, 'version_control.txt'),
         path.join('.', 'installers', 'versions', version, 'description.*')
-    ], {dot: true})
+    ], {dot: true, allowEmpty: true})
         .pipe(flatten({ includeParents: 0 }))
         .pipe(
             gulp.dest(path.join(buildFolder, version))
