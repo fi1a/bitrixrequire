@@ -134,6 +134,7 @@ class ComposerApi implements ComposerApiInterface
      */
     private function runCommand(InputInterface $input): ResultInterface
     {
+        $errorReporting = error_reporting();
         $stream = fopen('php://memory', 'rw');
         $output = new StreamOutput($stream, StreamOutput::VERBOSITY_NORMAL, true, $this->formatter);
         $application = new Application();
@@ -142,6 +143,7 @@ class ComposerApi implements ComposerApiInterface
         rewind($stream);
         $content = stream_get_contents($stream);
         fclose($stream);
+        error_reporting($errorReporting);
 
         return new Result($code === 0, $content);
     }
