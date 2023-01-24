@@ -42,13 +42,13 @@ const extendGlob = glob => {
         });
     }
 
-    globs.push('!{node_modules,node_modules/**}');
+    globs.push('!{**/node_modules,**/node_modules/**}');
     globs.push('!{build,build/**}');
     globs.push('!{dist,dist/**}');
     globs.push('!{.git,.git/**}');
     globs.push('!phpunit.xml');
     globs.push('!composer.lock');
-    globs.push('!package-lock.json');
+    globs.push('!**/package-lock.json');
     globs.push('!.phpunit.result.cache');
     globs.push('!.gitignore');
     globs.push('!{vendor/bin,vendor/bin/**}');
