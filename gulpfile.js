@@ -43,7 +43,7 @@ const extendGlob = glob => {
     }
 
     globs.push('!{**/node_modules,**/node_modules/**}');
-    globs.push('!{build,build/**}');
+    globs.push('!{runtime,runtime/**}');
     globs.push('!{dist,dist/**}');
     globs.push('!{.git,.git/**}');
     globs.push('!phpunit.xml');

@@ -1,6 +1,6 @@
 /vendor/
 /composer.lock
-tests/.env
+/tests/.env
 /phpunit.xml
 .phpunit.result.cache
 /resources/cache/
