@@ -6,13 +6,12 @@ let gulp = require('gulp'),
     zip = require('gulp-zip'),
     file = require('gulp-file'),
     os = require('os'),
-    fs = require('fs'),
     moment = require('moment'),
     sequence = require('gulp4-run-sequence'),
     flatten = require('gulp-flatten'),
     nrc = require('node-run-cmd');
 
-const buildFolder = 'build/release';
+const buildFolder = 'runtime/release';
 const distrFolder = 'dist';
 
 let lastVersion = null;

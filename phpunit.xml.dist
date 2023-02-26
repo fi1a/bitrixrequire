@@ -8,6 +8,7 @@
     bootstrap="tests/autoload.php"
     failOnRisky="true"
     failOnWarning="true"
+    cacheResultFile="runtime/cache/.phpunit.result.cache"
 >
     <coverage
         includeUncoveredFiles="true"
