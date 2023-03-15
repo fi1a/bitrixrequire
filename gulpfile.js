@@ -4,7 +4,7 @@ let gulp = require('gulp'),
     git = require('gulp-git'),
     path = require('path'),
     zip = require('gulp-zip'),
-    file = require('gulp-file'),
+    source = require('vinyl-source-stream'),
     os = require('os'),
     moment = require('moment'),
     sequence = require('gulp4-run-sequence'),
@@ -212,9 +212,10 @@ gulp.task('version', () => {
     const version = getVersionFolderName();
     const fileContent = createVersionFileContent(lastVersion.version, lastVersion.date);
 
-    return gulp.src(path.join(buildFolder, version, 'install', 'version.php'), {allowEmpty: true})
-        .pipe(gulp.dest(path.join(buildFolder, version, 'install')))
-        .pipe(file('version.php', fileContent));
+    let stream = source(path.join(buildFolder, version, 'install', 'version.php'));
+    stream.end(fileContent)
+
+    return stream.pipe(gulp.dest('.'));
 });
 
 // Копируем файлы update
