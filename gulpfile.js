@@ -44,6 +44,7 @@ const extendGlob = glob => {
     globs.push('!{**/node_modules,**/node_modules/**}');
     globs.push('!{runtime,runtime/**}');
     globs.push('!{dist,dist/**}');
+    globs.push('!{.idea,.idea/**}');
     globs.push('!{.git,.git/**}');
     globs.push('!phpunit.xml');
     globs.push('!composer.lock');
@@ -212,8 +213,8 @@ gulp.task('version', () => {
     const fileContent = createVersionFileContent(lastVersion.version, lastVersion.date);
 
     return gulp.src(path.join(buildFolder, version, 'install', 'version.php'), {allowEmpty: true})
-        .pipe(file('version.php', fileContent))
-        .pipe(gulp.dest(path.join(buildFolder, version, 'install')));
+        .pipe(gulp.dest(path.join(buildFolder, version, 'install')))
+        .pipe(file('version.php', fileContent));
 });
 
 // Копируем файлы update
@@ -289,5 +290,3 @@ gulp.task('build_update', (callback) => {
 gulp.task('default', (callback) => {
     sequence('build_last_version', 'build_update', callback);
 });
-
-// --no-dev
