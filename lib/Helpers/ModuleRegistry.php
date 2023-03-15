@@ -39,6 +39,7 @@ class ModuleRegistry
      */
     public static function getGlobals(string $key)
     {
+        // phpcs:ignore SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
         return $GLOBALS[$key];
     }
 
@@ -51,6 +52,7 @@ class ModuleRegistry
      */
     public static function setGlobals(string $key, $value): void
     {
+        // phpcs:ignore SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
         $GLOBALS[$key] = $value;
     }
 }
