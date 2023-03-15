@@ -14,19 +14,14 @@ class ModuleRegistry
     /**
      * @var \CMain
      */
-    private static $application;
-
-    private static $globals;
+    protected static $application;
 
     /**
      * Конструктор
-     *
-     * @param mixed[] $globals
      */
-    public static function configure(CMain $application, array &$globals)
+    public static function configure(CMain $application)
     {
         static::$application = $application;
-        static::$globals = $globals;
     }
 
     /**
@@ -44,7 +39,7 @@ class ModuleRegistry
      */
     public static function getGlobals(string $key)
     {
-        return static::$globals[$key];
+        return $GLOBALS[$key];
     }
 
     /**
@@ -56,6 +51,6 @@ class ModuleRegistry
      */
     public static function setGlobals(string $key, $value): void
     {
-        static::$globals[$key] = $value;
+        $GLOBALS[$key] = $value;
     }
 }
